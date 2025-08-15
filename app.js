@@ -10,6 +10,29 @@ app.use(express.json());
 // Set port and verify_token
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
+const mysql = require('mysql');
+
+const host = process.env.host;
+const user = process.env.user;
+const db = process.env.db;
+const pwd  = process.env.pwd;
+const axios = require('axios');
+
+const connection = mysql.createConnection({
+  host: host,
+  user: user,
+  password: pwd,
+  database: db // Optional: specify a database to connect to directly
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    
+  } else {
+      console.log('Connected to MySQL database!');
+  }
+})
 
 // Route for GET requests
 app.get('/', (req, res) => {
@@ -31,6 +54,30 @@ app.post('/', (req, res) => {
   res.status(200).end();
 });
 
+app.post( '/message', (req, res) => {
+const datasend =  {
+        messaging_product:"whatsapp",
+        to: "5519982292047",
+        type:"template",
+        template: { 
+            name: "hello_world", 
+            language: { 
+                code:"en_US" 
+            } 
+        }};
+
+axios.post('https://graph.facebook.com/v22.0/778752671981810/messages', datasend, {
+    headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${token}`
+        }
+    }).then(response => {
+            console.log('Data submitted:', response.data);
+        })
+        .catch(error => {
+            console.error('Error submitting data:', error);
+        });
+});
 // Start the server
 app.listen(port, () => {
   console.log(`\nListening on port ${port}\n`);
