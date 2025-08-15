@@ -1,0 +1,23 @@
+{
+  "name": "wabarbosa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/barbosasinc/wabarbosa.git"
+  },
+  "author": "barbosasinc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barbosasinc/wabarbosa/issues"
+  },
+  "homepage": "https://github.com/barbosasinc/wabarbosa#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
