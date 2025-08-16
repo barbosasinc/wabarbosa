@@ -12,10 +12,10 @@ const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 const mysql = require('mysql');
 
-const host = process.env.host;
-const user = process.env.user;
-const db = process.env.db;
-const pwd  = process.env.pwd;
+const host = process.env.HOST_DATSBASE;
+const user = process.env.USER_DATSBASE;
+const db = process.env.NAME_DATSBASE;
+const pwd  = process.env.PWD_DATSBASE;
 const axios = require('axios');
 
 const connection = mysql.createConnection({
