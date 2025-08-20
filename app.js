@@ -25,7 +25,7 @@ const connection = mysql.createConnection({
   database: db // Optional: specify a database to connect to directly
 });
 
-console.log( connection );
+//console.log( connection );
 
 connection.connect((err) => {
   if (err) {
