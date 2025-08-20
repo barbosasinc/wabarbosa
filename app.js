@@ -12,10 +12,10 @@ const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN;
 const mysql = require('mysql');
 
-const host = process.env.HOST_DATASBASE;
-const user = process.env.USER_DATASBASE;
-const db = process.env.NAME_DATASBASE;
-const pwd  = process.env.PWD_DATASBASE;
+const host = process.env.HOST_DATABASE;
+const user = process.env.USER_DATABASE;
+const db = process.env.NAME_DATABASE;
+const pwd  = process.env.PWD_DATABASE;
 const axios = require('axios');
 
 const connection = mysql.createConnection({
@@ -24,6 +24,8 @@ const connection = mysql.createConnection({
   password: pwd,
   database: db // Optional: specify a database to connect to directly
 });
+
+//console.log( connection );
 
 connection.connect((err) => {
   if (err) {
