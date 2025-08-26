@@ -82,7 +82,7 @@ const datasend =  {
 axios.post('https://graph.facebook.com/v22.0/778752671981810/messages', datasend, {
     headers: {
              'Content-Type': 'application/json',
-             'Authorization': `Bearer ${token}`
+             'Authorization': `Bearer ${verifyToken}`
         }
     }).then(response => {
             console.log('Data submitted:', response.data);
