@@ -57,7 +57,7 @@ app.post('/', (req, res) => {
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
   
-        pool.execute( "INSERT INTO message_received ( message ) VALUES ( ? )", JSON.stringify(req.body, null, 2) )
+        pool.execute( "INSERT INTO message_received ( message ) VALUES ( ? )", [JSON.stringify(req.body, null, 2) ])
             .then( ([results]) => { 
                 console.log( `Ok ${results.insertId} ` ) ;
       }).catch (error  =>{
