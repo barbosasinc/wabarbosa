@@ -177,7 +177,7 @@ app.get('/webhook', (req, res) => {
 // This endpoint receives incoming messages from WhatsApp.
 app.post('/webhook', async (req, res) => {
     const body = req.body;
-
+        console.log("recw");
     // Check if this is a WhatsApp notification
     if (body.object === 'whatsapp_business_account') {
         // It's good practice to iterate through entries, although there's usually only one.
