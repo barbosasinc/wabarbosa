@@ -80,7 +80,7 @@ async function saveMessageToDb(messageId, fromPhone, toPhone, body, type, timest
 // =================================================================
 const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
 const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
-const WHATSAPP_VERSION_API =  process.env.WHATSAPP_PHONE_NUMBER_ID || "v18.0";
+const WHATSAPP_VERSION_API =  process.env.WHATSAPP_VERSION_API || "v18.0";
 const WHATSAPP_API_URL = `https://graph.facebook.com/${WHATSAPP_VERSION_API}/${PHONE_NUMBER_ID}/messages`;
 
 /**
