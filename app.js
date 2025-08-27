@@ -150,7 +150,7 @@ app.post('/send', async (req, res) => {
 // -----------------------------------------------------------------
 
 // This endpoint is for webhook verification, as required by Meta.
-app.get('/webhook', (req, res) => {
+app.get('/', (req, res) => {
     const verify_token = process.env.WEBHOOK_VERIFY_TOKEN;
 
     // Parse params from the webhook verification request
@@ -175,7 +175,7 @@ app.get('/webhook', (req, res) => {
 });
 
 // This endpoint receives incoming messages from WhatsApp.
-app.post('/webhook', async (req, res) => {
+app.post('/', async (req, res) => {
     const body = req.body;
         console.log("recw");
     // Check if this is a WhatsApp notification
