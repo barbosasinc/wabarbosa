@@ -93,9 +93,11 @@ async function sendWhatsAppMessage(to, messageText) {
     try {
         const response = await axios.post(WHATSAPP_API_URL, {
             messaging_product: 'whatsapp',
+            recipient_type: "individual",
             to: to,
             type: 'text',
             text: {
+                preview_url: false,
                 body: messageText
             }
         }, {
