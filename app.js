@@ -177,7 +177,7 @@ app.get('/', (req, res) => {
 // This endpoint receives incoming messages from WhatsApp.
 app.post('/', async (req, res) => {
     const body = req.body;
-        console.log("recw");
+    
     // Check if this is a WhatsApp notification
     if (body.object === 'whatsapp_business_account') {
         // It's good practice to iterate through entries, although there's usually only one.
@@ -185,23 +185,26 @@ app.post('/', async (req, res) => {
             for (const change of entry.changes) {
                 // We only care about the 'messages' field
                 if (change.field === 'messages') {
-                    const messageData = change.value.messages[0];
                     
-                    // We only process text messages in this example
-                    if (messageData.type === 'text') {
-                        const from = messageData.from; // Sender's phone number
-                        const messageId = messageData.id;
-                        const timestamp = messageData.timestamp;
-                        const textBody = messageData.text.body;
-                        
-                        // The 'to' number is our business phone number, which we get from the metadata
-                        const to = change.value.metadata.display_phone_number;
-
-                        console.log(`Received message: "${textBody}" from ${from}`);
-
-                        // Save the received message to the database
-                        await saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
-                    }
+                    //const messageData = change.value.messages[0];
+                    change.value.messages.map( (messageData) => {
+                        // We only process text messages in this example
+                        if (messageData.type === 'text') {
+                            const from = messageData.from; // Sender's phone number
+                            const messageId = messageData.id;
+                            const timestamp = messageData.timestamp;
+                            const textBody = messageData.text.body;
+                            
+                            // The 'to' number is our business phone number, which we get from the metadata
+                            const to = change.value.metadata.display_phone_number;
+    
+                            console.log(`Received message: "${textBody}" from ${from}`);
+    
+                            // Save the received message to the database
+                            await saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
+                        }
+                    } );
+                    
                 }
             }
         }
