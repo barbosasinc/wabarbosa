@@ -201,7 +201,7 @@ app.post('/', async (req, res) => {
                             console.log(`Received message: "${textBody}" from ${from}`);
     
                             // Save the received message to the database
-                            await saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
+                             saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
                         }
                     } );
                     
