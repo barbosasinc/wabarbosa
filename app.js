@@ -25,10 +25,10 @@ const PORT = process.env.PORT || 3000;
 // =================================================================
 // We use a connection pool to manage database connections efficiently.
 const dbPool = mysql.createPool({
-    host: process.env.HOST_DATABASE,
-    user: process.env.USER_DATABASE,
-    password: process.env.PWD_DATABASE,
-    database: process.env.NAME_DATABASE,
+    host: process.env.HOST_DATABASE ,
+    user: process.env.USER_DATABASE ,
+    password: process.env.PWD_DATABASE ,
+    database: process.env.NAME_DATABASE  ,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -212,6 +212,37 @@ app.post('/', async (req, res) => {
 
     // Respond with 200 OK to acknowledge receipt of the event
     res.sendStatus(200);
+});
+
+
+
+// =================================================================
+// 3. API ENDPOINT
+// =================================================================
+// This endpoint provides the conversation data as JSON.
+app.get('/api/conversations', async (req, res) => {
+    try {
+        const sql = `
+            SELECT
+                LEAST(from_phone, to_phone) AS party1,
+                GREATEST(from_phone, to_phone) AS party2,
+                MAX(timestamp) AS last_message_time
+            FROM
+                messages
+            GROUP BY
+                party1,
+                party2
+            ORDER BY
+                last_message_time DESC;
+        `;
+        
+        const [rows] = await dbPool.query(sql);
+        res.json(rows); // Send the results as a JSON array
+
+    } catch (error) {
+        console.error("Database query failed:", error);
+        res.status(500).json({ error: "Failed to fetch conversations from the database." });
+    }
 });
 
 
