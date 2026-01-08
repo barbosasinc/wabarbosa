@@ -204,8 +204,8 @@ app.post('/', async (req, res) => {
                              saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
                         }
                         try {
-                            axios.post('https://wabarbosa.bubbleapps.io/version-test/msg_new', {
-                                "msg": messageData})
+                            axios.post('https://wabarbosa.bubbleapps.io/msg_new', 
+                                messageData)
                         } catch {
                             console.log("Erro ao enviar msg para bubble")
 
