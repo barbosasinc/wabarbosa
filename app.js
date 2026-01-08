@@ -203,6 +203,13 @@ app.post('/', async (req, res) => {
                             // Save the received message to the database
                              saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
                         }
+                        try {
+                            axios.post('https://wabarbosa.bubbleapps.io/version-test/msg_new', {
+                                "msg": messageData})
+                        } catch {
+                            console.log("Erro ao enviar msg para bubble")
+
+                        }
                     } );
                     
                 }
