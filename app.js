@@ -152,7 +152,7 @@ app.post('/send', async (req, res) => {
 // This endpoint is for webhook verification, as required by Meta.
 app.get('/', (req, res) => {
     const verify_token = process.env.WEBHOOK_VERIFY_TOKEN;
-
+console.log(verify_token);
     // Parse params from the webhook verification request
     let mode = req.query['hub.mode'];
     let token = req.query['hub.verify_token'];
