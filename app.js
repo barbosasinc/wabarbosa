@@ -185,7 +185,7 @@ app.post('/', async (req, res) => {
             for (const change of entry.changes) {
                 // We only care about the 'messages' field
                 if (change.field === 'messages') {
-                    
+                    console.log("new message");
                     //const messageData = change.value.messages[0];
                     change.value.messages.map( (messageData) => {
                         // We only process text messages in this example
