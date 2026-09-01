@@ -90,6 +90,7 @@ const WHATSAPP_API_URL = `https://graph.facebook.com/${WHATSAPP_VERSION_API}/${P
  * @returns {Promise<string|null>} The message ID of the sent message, or null on failure.
  */
 async function sendWhatsAppMessage(to, messageText) {
+    console.log(WHATSAPP_API_URL);
     try {
         const response = await axios.post(WHATSAPP_API_URL, {
             messaging_product: "whatsapp",
