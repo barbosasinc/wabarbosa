@@ -231,6 +231,7 @@ app.post('/', async (req, res) => {
 // =================================================================
 // This endpoint provides the conversation data as JSON.
 app.get('/api/conversations', async (req, res) => {
+    console.log('received');
     try {
         const sql = `
             SELECT
