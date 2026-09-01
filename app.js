@@ -120,6 +120,9 @@ async function sendWhatsAppMessage(to, messageText) {
     }
 }
 
+app.get('/message', async (req,res) => {
+    console.log( req.body )
+})
 
 // =================================================================
 // 6. API ENDPOINTS
