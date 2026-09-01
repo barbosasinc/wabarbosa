@@ -92,15 +92,17 @@ const WHATSAPP_API_URL = `https://graph.facebook.com/${WHATSAPP_VERSION_API}/${P
 async function sendWhatsAppMessage(to, messageText) {
     try {
         const response = await axios.post(WHATSAPP_API_URL, {
-            messaging_product: 'whatsapp',
-            recipient_type: "individual",
+            messaging_product: "whatsapp",
             to: to,
-            type: 'text',
+            type: "text",
             text: {
-                preview_url: false,
-                body: messageText
+                "body": messageText
             }
         }, {
+            params: {
+
+            },
+
             headers: {
                 'Authorization': `Bearer ${WHATSAPP_API_TOKEN}`,
                 'Content-Type': 'application/json'
