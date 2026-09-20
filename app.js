@@ -8,15 +8,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise');
 const axios = require('axios');
+const cors = require('cors');
 require('dotenv').config();
-
+const urlfrontend = process.env.URLFRONTEND || "*"
 // =================================================================
 // 2. EXPRESS APP INITIALIZATION
 // =================================================================
 const app = express();
 // It's crucial to use bodyParser.json() to parse the incoming webhook requests.
 // WhatsApp sends data in JSON format.
+
 app.use(bodyParser.json());
+
+app.use(cors({
+    origin: urlfrontend,
+    credentials: true
+}));
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -131,7 +139,8 @@ app.get('/message', async (req,res) => {
 // -----------------------------------------------------------------
 // Endpoint for sending messages
 // -----------------------------------------------------------------
-app.post('/send', async (req, res) => {
+app.post('api/send', async (req, res) => {
+    console.log( req.body);
     const { to, message } = req.body;
 
     if (!to || !message) {
