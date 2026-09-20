@@ -129,7 +129,7 @@ async function sendWhatsAppMessage(to, messageText) {
 }
 
 app.get('/message', async (req,res) => {
-    console.log( req.body )
+    console.log( '/message' );
 })
 
 // =================================================================
