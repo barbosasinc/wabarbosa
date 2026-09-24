@@ -4,10 +4,6 @@ const axios = require('axios');
 function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
     const router = express.Router();
 
-    router.get('/message', async (req, res) => {
-        console.log('/message');
-        res.sendStatus(200);
-    });
 
     router.post('/api/send', async (req, res) => {
         console.log(req.body);
@@ -48,60 +44,9 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
     });
 
     router.post('/', async (req, res) => {
-        const body = req.body;
+       console.log('Received webhook event:', JSON.stringify(req.body, null, 2));
 
-        if (body.object === 'whatsapp_business_account') {
-            for (const entry of body.entry) {
-                for (const change of entry.changes) {
-                    if (change.field === 'messages') {
-                        console.log('new message');
-
-                        change.value.messages.forEach((messageData) => {
-                            if (messageData.type === 'text') {
-                                const from = messageData.from;
-                                const messageId = messageData.id;
-                                const timestamp = messageData.timestamp;
-                                const textBody = messageData.text.body;
-                                const to = change.value.metadata.display_phone_number;
-
-                                console.log(`Received message: "${textBody}" from ${from}`);
-                                whatsappService.saveMessageToDb(messageId, from, to, textBody, 'received', timestamp);
-                            }
-
-                            try {
-                                axios.post('https://wabarbosa.bubbleapps.io/msg_new', messageData);
-                            } catch (error) {
-                                console.log('Erro ao enviar msg para bubble');
-                            }
-                        });
-                    }
-                }
-            }
-        }
-
-        return res.sendStatus(200);
-    });
-
-    router.get('/api/conversations', async (req, res) => {
-        console.log('received');
-
-        try {
-            const sql = `
-                SELECT
-                    LEAST(from_phone, to_phone) AS party1,
-                    GREATEST(from_phone, to_phone) AS party2,
-                    MAX(timestamp) AS last_message_time
-                FROM messages
-                GROUP BY party1, party2
-                ORDER BY last_message_time DESC;
-            `;
-
-            const [rows] = await dbPool.query(sql);
-            return res.json(rows);
-        } catch (error) {
-            console.error('Database query failed:', error);
-            return res.status(500).json({ error: 'Failed to fetch conversations from the database.' });
-        }
+        
     });
 
     router.use((req, res) => {
