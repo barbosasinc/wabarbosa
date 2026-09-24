@@ -105,6 +105,7 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
     });
 
     router.use((req, res) => {
+        console.warn(`Route not found: ${req.method} ${req.originalUrl}`);
         return res.status(404).json({
             success: false,
             message: `Route not found: ${req.method} ${req.originalUrl}`
