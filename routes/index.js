@@ -45,6 +45,27 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
 
     router.post('/', async (req, res) => {
        console.log('Received webhook event:', JSON.stringify(req.body, null, 2));
+       
+        const entry = req.body.entry && req.body.entry[0];
+        if (entry && entry.changes && entry.changes[0] && entry.changes[0].value) {
+            const value = entry.changes[0].value;
+            const messages = value.messages;
+
+            if (messages && messages.length > 0) {
+                for (const message of messages) {
+                    const messageId = message.id;
+                    const fromPhone = message.from;
+                    const toPhone = value.metadata.phone_number_id;
+                    const body = message.text ? message.text.body : '';
+                    const type = message.type;
+                    const timestamp = parseInt(message.timestamp, 10);
+
+                    await whatsappService.saveMessageToDb(messageId, fromPhone, toPhone, body, type, timestamp);
+                }
+            }
+        }
+
+        return res.sendStatus(200);
 
         
     });
