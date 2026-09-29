@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(cors({
     origin: urlfrontend,
-    credentials: true
+    credentials: urlfrontend !== '*'
 }));
 
 const dbPool = mysql.createPool({

@@ -5,6 +5,7 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
     const router = express.Router();
 
 
+
     router.post('/api/send', async (req, res) => {
         console.log(req.body);
         const { to, message } = req.body;
@@ -70,6 +71,29 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
         
     });
 
+
+    router.get('/api/conversations', async (req, res) => {
+        console.log('received');
+
+        try {
+            const sql = `
+                SELECT
+                    LEAST(from_phone, to_phone) AS party1,
+                    GREATEST(from_phone, to_phone) AS party2,
+                    MAX(timestamp) AS last_message_time
+                FROM messages
+                GROUP BY party1, party2
+                ORDER BY last_message_time DESC;
+            `;
+
+            const [rows] = await dbPool.query(sql);
+            return res.json(rows);
+        } catch (error) {
+            console.error('Database query failed:', error);
+            return res.status(500).json({ error: 'Failed to fetch conversations from the database.' });
+        }
+    });
+
     router.use((req, res) => {
         console.warn(`Route not found: ${req.method} ${req.originalUrl}`);
         return res.status(404).json({
@@ -77,6 +101,7 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
             message: `Route not found: ${req.method} ${req.originalUrl}`
         });
     });
+
 
     return router;
 }
