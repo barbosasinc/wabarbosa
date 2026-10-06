@@ -73,14 +73,15 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
 
 
     router.get('/api/conversations', async (req, res) => {
-        console.log('received');
-
+        
         try {
             const sql = `
                 SELECT
                     LEAST(from_phone, to_phone) AS party1,
                     GREATEST(from_phone, to_phone) AS party2,
-                    MAX(timestamp) AS last_message_time
+                    MAX(timestamp) AS last_message_time,
+                    COUNT(*) AS message_count,
+                    body AS last_message
                 FROM messages
                 GROUP BY party1, party2
                 ORDER BY last_message_time DESC;
@@ -94,6 +95,43 @@ function createRoutes({ dbPool, whatsappService, phoneNumberId }) {
         }
     });
 
+    router.get('/api/messages/:contactId', async (req, res) => {
+        const contactId = req.params.contactId;
+        
+        try {
+            const sql = `
+                SELECT body, from_phone, to_phone, timestamp, type
+                FROM messages
+                WHERE (from_phone = ? OR to_phone = ?)
+                ORDER BY timestamp ASC;
+            `;
+             
+
+            const [rows] = await dbPool.query(sql, [contactId, contactId]);
+            return res.json(rows);
+        } catch (error) {
+            console.error('Database query failed:', error);
+            return res.status(500).json({ error: 'Failed to fetch messages from the database.' });
+        }
+    });
+
+    router.delete('/api/conversations/:contactId', async (req, res) => {
+        const contactId = req.params.contactId;
+
+        try {
+            const sql = `
+                DELETE FROM messages
+                WHERE from_phone = ? OR to_phone = ?;
+            `;
+
+            await dbPool.query(sql, [contactId, contactId]);
+            return res.json({ success: true, message: 'Conversation deleted successfully.' });
+        } catch (error) {
+            console.error('Database query failed:', error);
+            return res.status(500).json({ error: 'Failed to delete conversation from the database.' });
+        }
+    });
+    
     router.use((req, res) => {
         console.warn(`Route not found: ${req.method} ${req.originalUrl}`);
         return res.status(404).json({
